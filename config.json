@@ -1,0 +1,4 @@
+{
+  "port": "5000",
+  "database_url": "mongodb+srv://nextLevelUser:22oHYUwcYbBnyhFW@cluster0.lzwnbrb.mongodb.net/level2-assignment-2?retryWrites=true&w=majority"
+}
