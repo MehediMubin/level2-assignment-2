@@ -18,8 +18,26 @@ const getSingleUser = async (id: number) => {
    return result;
 };
 
+const updateSingleUser = async (id, updatedInfo) => {
+   const result = await UserModel.findOneAndUpdate(
+      { userId: id },
+      updatedInfo,
+      { new: true },
+   ).select('-password');
+   return result;
+};
+
+const deleteSingleUser = async (id: number) => {
+   const result = await UserModel.findOneAndDelete(
+      { userId: id }
+   );
+   return result;
+};
+
 export const UserServices = {
    createUser,
    getAllUsers,
    getSingleUser,
+   updateSingleUser,
+   deleteSingleUser,
 };
