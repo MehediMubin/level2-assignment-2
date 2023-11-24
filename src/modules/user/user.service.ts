@@ -28,9 +28,44 @@ const updateSingleUser = async (id, updatedInfo) => {
 };
 
 const deleteSingleUser = async (id: number) => {
-   const result = await UserModel.findOneAndDelete(
-      { userId: id }
-   );
+   const result = await UserModel.findOneAndDelete({ userId: id });
+   return result;
+};
+
+const createOrder = async (id, orderInfo) => {
+   const result = await UserModel.findOneAndUpdate({ userId: id }, orderInfo, {
+      new: true,
+   });
+   return result;
+};
+
+const getAllOrders = async () => {
+   const result = await UserModel.find().select('orders');
+   return result;
+};
+
+const getTotalPrice = async () => {
+   const result = await UserModel.aggregate([
+      {
+         $unwind: '$orders',
+      },
+      {
+         $group: {
+            _id: 0,
+            totalPrice: {
+               $sum: {
+                  $multiply: ['$orders.price', '$orders.quantity'],
+               },
+            },
+         },
+      },
+      {
+         $project: {
+            _id: 0,
+         },
+      },
+   ]);
+
    return result;
 };
 
@@ -40,4 +75,7 @@ export const UserServices = {
    getSingleUser,
    updateSingleUser,
    deleteSingleUser,
+   createOrder,
+   getAllOrders,
+   getTotalPrice,
 };
