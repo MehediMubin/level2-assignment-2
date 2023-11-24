@@ -14,9 +14,7 @@ const getAllUsers = async () => {
 };
 
 const getSingleUser = async (id: number) => {
-   const result = await UserModel.findOne({ userId: id }).select(
-      'username fullName age email address',
-   );
+   const result = await UserModel.findOne({ userId: id }).select('-password');
    return result;
 };
 
