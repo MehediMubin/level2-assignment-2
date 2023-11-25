@@ -7,10 +7,10 @@ const createUser = async (req: Request, res: Response) => {
    try {
       const user = req.body;
 
-      const { error, value } = userValidationSchema.validate(user);
+      const { error } = userValidationSchema.validate(user);
 
       if (error) {
-         res.status(500).json({
+         return res.status(500).json({
             success: false,
             message: 'Something went wrong',
             error: error.details,
@@ -88,10 +88,10 @@ const updateSingleUser = async (req: Request, res: Response) => {
       const id = req.params.userId;
       const updatedInfo = req.body;
 
-      const { error, value } = userValidationSchema.validate(updatedInfo);
+      const { error } = userValidationSchema.validate(updatedInfo);
 
       if (error) {
-         res.status(500).json({
+         return res.status(500).json({
             success: false,
             message: 'Something went wrong',
             error: error.details,
@@ -132,7 +132,7 @@ const deleteSingleUser = async (req: Request, res: Response) => {
       const id = req.params.userId;
       const result = await UserServices.deleteSingleUser(Number(id));
       if (result === null) {
-         return res.status(404).json({
+         res.status(404).json({
             success: false,
             message: 'User not found',
             error: {
@@ -141,10 +141,10 @@ const deleteSingleUser = async (req: Request, res: Response) => {
             },
          });
       } else {
-         return res.status(200).json({
+         res.status(200).json({
             success: true,
             message: 'User deleted successfully!',
-            data: result,
+            data: null,
          });
       }
    } catch (error) {
@@ -161,10 +161,10 @@ const createOrder = async (req: Request, res: Response) => {
       const id = req.params.userId;
       const orderInfo = req.body;
 
-      const { error, value } = userValidationSchema.validate(orderInfo);
+      const { error } = userValidationSchema.validate(orderInfo);
 
       if (error) {
-         res.status(500).json({
+         return res.status(500).json({
             success: false,
             message: 'Something went wrong',
             error: error.details,
@@ -186,7 +186,7 @@ const createOrder = async (req: Request, res: Response) => {
          return res.status(200).json({
             success: true,
             message: 'Order created successfully!',
-            data: result,
+            data: null,
          });
       }
    } catch (error) {
@@ -201,7 +201,7 @@ const createOrder = async (req: Request, res: Response) => {
 const getAllOrders = async (req: Request, res: Response) => {
    try {
       const id = req.params.userId;
-      const result = await UserServices.getAllOrders(id);
+      const result = await UserServices.getAllOrders(Number(id));
 
       if (result === null) {
          return res.status(404).json({

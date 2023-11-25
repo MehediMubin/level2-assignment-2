@@ -33,9 +33,17 @@ const deleteSingleUser = async (id: number) => {
 };
 
 const createOrder = async (id, orderInfo) => {
-   const result = await UserModel.findOneAndUpdate({ userId: id }, orderInfo, {
-      new: true,
-   });
+   const result = await UserModel.findOne({ userId: id });
+   if (result) {
+      const updatedOrder = [...result.orders, ...orderInfo.orders];
+
+      const updatedResult = await UserModel.findOneAndUpdate(
+         { userId: id },
+         { orders: updatedOrder },
+         { new: true },
+      );
+      return updatedResult;
+   }
    return result;
 };
 
