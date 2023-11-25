@@ -55,32 +55,14 @@ const getAllOrders = async (id: number) => {
 };
 
 const getTotalPrice = async (id: number) => {
-   const result = await UserModel.aggregate([
-      {
-         $match: {
-            userId: id,
-         },
-      },
-      {
-         $unwind: '$orders',
-      },
-      {
-         $group: {
-            _id: null,
-            totalPrice: {
-               $sum: {
-                  $multiply: ['$orders.price', '$orders.quantity'],
-               },
-            },
-         },
-      },
-      {
-         $project: {
-            _id: 0,
-            totalPrice: 1,
-         },
-      },
-   ]);
+   const result = await UserModel.findOne({ userId: id });
+   if (result) {
+      const totalPrice = result?.orders.reduce((total, order) => {
+         return total + order.price * order.quantity;
+      }, 0);
+
+      return { totalPrice };
+   }
 
    return result;
 };

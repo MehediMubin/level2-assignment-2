@@ -233,11 +233,22 @@ const getTotalPrice = async (req: Request, res: Response) => {
       const id = req.params.userId;
       const result = await UserServices.getTotalPrice(Number(id));
 
-      res.status(200).json({
-         success: true,
-         message: 'Total price calculated successfully!',
-         data: result[0],
-      });
+      if (result === null) {
+         return res.status(404).json({
+            success: false,
+            message: 'User not found',
+            error: {
+               code: 404,
+               description: 'User not found',
+            },
+         });
+      } else {
+         return res.status(200).json({
+            success: true,
+            message: 'Total price fetched successfully!',
+            data: result,
+         });
+      }
    } catch (error) {
       res.status(500).json({
          success: false,
