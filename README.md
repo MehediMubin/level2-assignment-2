@@ -9,7 +9,7 @@ This project is a Node.js application that uses TypeScript and MongoDB. It inclu
 1. Clone the repository: `git clone https://github.com/MehediMubin/level2-assignment-2.git`
 2. Install the dependencies: `npm install`
 3. Copy the `.env.example` file to a new file named `.env` and fill in your environment variables
-4. Start the server: necessary information regarding this are in package.json file under 'scripts' section
+4. Start the server: `npm run start:dev`
 
 ## Usage
 
