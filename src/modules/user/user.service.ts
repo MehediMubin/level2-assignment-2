@@ -35,7 +35,9 @@ const deleteSingleUser = async (id: number) => {
 const createOrder = async (id, orderInfo) => {
    const result = await UserModel.findOne({ userId: id });
    if (result) {
-      const updatedOrder = [...result.orders, ...orderInfo.orders];
+      const existingOrder = result.orders;
+      const newOrder = orderInfo.orders;
+      const updatedOrder = [...existingOrder, ...newOrder];
 
       const updatedResult = await UserModel.findOneAndUpdate(
          { userId: id },
@@ -55,7 +57,9 @@ const getAllOrders = async (id: number) => {
 const getTotalPrice = async (id: number) => {
    const result = await UserModel.aggregate([
       {
-         $match: { userId: id },
+         $match: {
+            userId: id,
+         },
       },
       {
          $unwind: '$orders',
@@ -73,6 +77,7 @@ const getTotalPrice = async (id: number) => {
       {
          $project: {
             _id: 0,
+            totalPrice: 1,
          },
       },
    ]);
