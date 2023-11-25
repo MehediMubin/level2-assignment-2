@@ -77,7 +77,6 @@ const userSchema = new Schema<IUser>({
    },
    isActive: {
       type: Boolean,
-      required: [true, 'Active status is required'],
       default: true,
    },
    hobbies: {
