@@ -11,7 +11,7 @@ app.use(cors());
 app.use('/api/users', userRouter);
 
 app.get('/', (req: Request, res: Response) => {
-   res.send('Welcome to this API.');
+   res.send('Welcome to this API of users.');
 });
 
 export default app;
