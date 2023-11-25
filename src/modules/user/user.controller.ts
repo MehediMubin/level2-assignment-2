@@ -1,10 +1,22 @@
 import { Request, Response } from 'express';
 import { UserModel } from './user.model';
 import { UserServices } from './user.service';
+import userValidationSchema from './user.validation';
 
 const createUser = async (req: Request, res: Response) => {
    try {
       const user = req.body;
+
+      const { error, value } = userValidationSchema.validate(user);
+
+      if (error) {
+         res.status(500).json({
+            success: false,
+            message: 'Something went wrong',
+            error: error.details,
+         });
+      }
+
       const result = await UserServices.createUser(user);
 
       const createdUser = await UserModel.findOne({
@@ -75,6 +87,17 @@ const updateSingleUser = async (req: Request, res: Response) => {
    try {
       const id = req.params.userId;
       const updatedInfo = req.body;
+
+      const { error, value } = userValidationSchema.validate(updatedInfo);
+
+      if (error) {
+         res.status(500).json({
+            success: false,
+            message: 'Something went wrong',
+            error: error.details,
+         });
+      }
+
       const result = await UserServices.updateSingleUser(
          Number(id),
          updatedInfo,
@@ -91,7 +114,7 @@ const updateSingleUser = async (req: Request, res: Response) => {
       } else {
          return res.status(200).json({
             success: true,
-            message: 'User fetched successfully!',
+            message: 'User updated successfully!',
             data: result,
          });
       }
@@ -120,7 +143,7 @@ const deleteSingleUser = async (req: Request, res: Response) => {
       } else {
          return res.status(200).json({
             success: true,
-            message: 'User fetched successfully!',
+            message: 'User deleted successfully!',
             data: result,
          });
       }
@@ -137,6 +160,17 @@ const createOrder = async (req: Request, res: Response) => {
    try {
       const id = req.params.userId;
       const orderInfo = req.body;
+
+      const { error, value } = userValidationSchema.validate(orderInfo);
+
+      if (error) {
+         res.status(500).json({
+            success: false,
+            message: 'Something went wrong',
+            error: error.details,
+         });
+      }
+
       const result = await UserServices.createOrder(Number(id), orderInfo);
 
       if (result === null) {
@@ -151,7 +185,7 @@ const createOrder = async (req: Request, res: Response) => {
       } else {
          return res.status(200).json({
             success: true,
-            message: 'User fetched successfully!',
+            message: 'Order created successfully!',
             data: result,
          });
       }
@@ -166,7 +200,8 @@ const createOrder = async (req: Request, res: Response) => {
 
 const getAllOrders = async (req: Request, res: Response) => {
    try {
-      const result = await UserServices.getAllOrders();
+      const id = req.params.userId;
+      const result = await UserServices.getAllOrders(id);
 
       if (result === null) {
          return res.status(404).json({
@@ -180,7 +215,7 @@ const getAllOrders = async (req: Request, res: Response) => {
       } else {
          return res.status(200).json({
             success: true,
-            message: 'User fetched successfully!',
+            message: 'Order fetched successfully!',
             data: result,
          });
       }
@@ -195,7 +230,8 @@ const getAllOrders = async (req: Request, res: Response) => {
 
 const getTotalPrice = async (req: Request, res: Response) => {
    try {
-      const result = await UserServices.getTotalPrice();
+      const id = req.params.userId;
+      const result = await UserServices.getTotalPrice(Number(id));
       res.status(200).json({
          success: true,
          message: 'Total price calculated successfully!',

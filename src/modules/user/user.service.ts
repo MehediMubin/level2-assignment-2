@@ -39,19 +39,22 @@ const createOrder = async (id, orderInfo) => {
    return result;
 };
 
-const getAllOrders = async () => {
-   const result = await UserModel.find().select('orders');
+const getAllOrders = async (id: number) => {
+   const result = await UserModel.findOne({ userId: id }).select('orders');
    return result;
 };
 
-const getTotalPrice = async () => {
+const getTotalPrice = async (id: number) => {
    const result = await UserModel.aggregate([
+      {
+         $match: { userId: id },
+      },
       {
          $unwind: '$orders',
       },
       {
          $group: {
-            _id: 0,
+            _id: null,
             totalPrice: {
                $sum: {
                   $multiply: ['$orders.price', '$orders.quantity'],
