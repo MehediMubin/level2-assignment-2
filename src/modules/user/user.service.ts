@@ -58,9 +58,10 @@ const getAllOrders = async (id: number) => {
 
 const getTotalPrice = async (id: number) => {
    const result = await UserModel.findOne({ userId: id });
+   
    if (result) {
-      const totalPrice = result?.orders.reduce((total, order) => {
-         return total + order.price * order.quantity;
+      const totalPrice = result.orders?.reduce((total, order) => {
+         return total + (order.price * order.quantity);
       }, 0);
 
       return { totalPrice };
