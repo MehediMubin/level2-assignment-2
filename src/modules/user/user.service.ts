@@ -18,7 +18,7 @@ const getSingleUser = async (id: number) => {
    return result;
 };
 
-const updateSingleUser = async (id, updatedInfo) => {
+const updateSingleUser = async (id: number, updatedInfo: IUser) => {
    const result = await UserModel.findOneAndUpdate(
       { userId: id },
       updatedInfo,
@@ -32,12 +32,14 @@ const deleteSingleUser = async (id: number) => {
    return result;
 };
 
-const createOrder = async (id, orderInfo) => {
+const createOrder = async (id: number, orderInfo: IUser) => {
    const result = await UserModel.findOne({ userId: id });
+
    if (result) {
-      const existingOrder = result.orders;
-      const newOrder = orderInfo.orders;
-      const updatedOrder = [...existingOrder, ...newOrder];
+      const newOrder = orderInfo.orders ?? [];
+      const updatedOrder = result.orders
+         ? [...result.orders, ...newOrder]
+         : [orderInfo];
 
       const updatedResult = await UserModel.findOneAndUpdate(
          { userId: id },
